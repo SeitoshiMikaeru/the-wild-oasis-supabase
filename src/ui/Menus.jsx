@@ -85,6 +85,7 @@ function Toggle({id}) {
   const {openId, close, open, setPosition} = useContext(MenusContext);
   
   function handleClick(e) {
+    e.stopPropagation();
     const rect = e.target.closest("button").getBoundingClientRect();
 
     setPosition({
@@ -92,8 +93,12 @@ function Toggle({id}) {
       y: rect.height + rect.y + 8,
     });
 
-    if(id === openId) close();
-    else open(id);
+    if(id === openId) {
+      close();
+    } 
+    else {
+      open(id);
+    }
   }
 
   return <StyledToggle onClick={handleClick}>
@@ -104,7 +109,7 @@ function Toggle({id}) {
 function List({id, children}) {
   const {openId, position, close} = useContext(MenusContext);
 
-  const ref = useDetectOutsideClick(close);
+  const ref = useDetectOutsideClick(close, false);
 
   if (openId !== id) return null;
 
